@@ -6,7 +6,7 @@ $hgm_field_names = array(
 );
 /* Admin Menu */
 function hgm_create_admin_menu(){
-	add_menu_page('HGM Maps','HGM&nbsp;Maps',3,'hgm-settings','hgm_settings_page',HGM_PLUGIN . 'graphics/icon.png');
+	add_menu_page('HGMaps','HGMaps',3,'hgm-settings','hgm_settings_page',HGM_PLUGIN . 'graphics/icon.png');
 	add_action('admin_init','hgm_register_options');
 }
 add_action('admin_menu','hgm_create_admin_menu');
@@ -49,7 +49,7 @@ function hgm_settings_page(){
 	}
 	</script>
 	<div class="wrap">
-		<h2>HGM Maps Settings</h2>
+		<h2>HGMaps Settings</h2>
 		<form name="settings" method="post" action="options.php">
 			<?php settings_fields('hgm_options') ?>
             <h3>Basic Options<input type="submit" class="save-btn" value="<?php _e('save') ?>" /><span class="save-btn" onclick="hgmExpandCollapse('hgm-help');">view help<span style="color:#222">&nbsp;&nbsp;|&nbsp;&nbsp;</span></span></h3>

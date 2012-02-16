@@ -9,6 +9,20 @@ Author URI: http://hyperspatial.com/
 License: 
 */
 
+/*
+
+Map Args:
+
+width = enter css width value, 100px, 50% etc
+height = enter css height value, 100px, 50% etc
+center = enter DDS lat,long separated by a comma, or enter 'user_id' for user location
+zoom = google zoom value
+heading = Enter a heading for the info window
+content = Enter content for the info window
+options = Enter a comma seperates list of javascript options
+
+*/
+
 //Constants
 define('HGM_PLUGIN',WP_PLUGIN_URL . '/' . basename(dirname(__FILE__)) . '/');
 define('HGM_INCLUDES',dirname(__FILE__) . '/includes/');
@@ -37,8 +51,12 @@ function hgm_map($args,$shortcode = false){
 /* Shortcode - [hgm_map width="400" height="400"] */
 function hgm_shortcode($args){ return hgm_map($args,true); }
 
+/* Enqueue Styles */
+function hgm_styles(){ wp_enqueue_style('hgm_styles', HGM_PLUGIN . 'style.css'); }
+
 /* ~~~~~~~~~~~~~~ Actions ~~~~~~~~~~~~~~ */
 
 add_action('wp_footer','hgm_load_api');
 add_shortcode('hgm_map','hgm_shortcode');
+add_action('wp_print_styles','hgm_styles');
 ?>
