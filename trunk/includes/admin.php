@@ -1,7 +1,8 @@
 <?php /* Admin Page */
 
 $hgm_field_names = array(
-	'hgm_api_key'
+	'hgm_api_key',
+	'hgm_location'
 
 );
 /* Admin Menu */
@@ -60,17 +61,13 @@ function hgm_settings_page(){
             	</ul>
             </div>
             <p>
-            <label>Google API Key - <a href="https://code.google.com/apis/console" target="_blank">Get Key</a></span></label><span class="help"><br />
+            	<label>Google API Key - <a href="https://code.google.com/apis/console" target="_blank">Get Key</a></span></label><span class="help"><br />
             	<input name="hgm_api_key" type="text" value="<?php echo $hgm_api_key ?>" size="50"/>
             </p>
-            <div>
-            	<label>Slider</label><br />
-            	<select id="slider-dropdown" name="hgm_slider_type" onChange="this.form.submit();">
-					<?php foreach($hgm_sliders as $slider): ?>
-                    <option <?php if ($slider == $hgm_slider_type) echo 'selected="selected"' ?>><?php echo $slider ?></option>
-                    <?php endforeach ?>
-                </select>
-            </div>   
+            <p>
+            	<label>Default Location</label><span class="help"><br />
+            	<input name="hgm_location" type="text" value="<?php echo $hgm_location ?>" size="24"/>
+            </p>              
             <p>
                 <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
             </p>
@@ -91,8 +88,7 @@ function hgm_set_option_defaults(){
 	global $hgm_field_names;
 	foreach($hgm_field_names as $field){
 		switch($field){
-			case 'hgm_slider_type': hgm_ck_option('hgm_slider_type','jQuery Cycle'); break;
-			
+			case 'hgm_location': hgm_ck_option('hgm_location','42.284821,-72.837902'); break;
 		}
 	}	
 	return true;

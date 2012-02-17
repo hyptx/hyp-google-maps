@@ -1,19 +1,82 @@
 <?php /* The Map Classes */
 
+class HgmGeocoder{
+	public function __construct(){
+		global $hgm_geocoder;
+		$hgm_geocoder = 1;
+		$this->print_geo_js();
+	}
+	public function print_geo_js(){
+		$default_location = get_option('hgm_location');
+		if(!$default_location) $default_location = '42.284821,-72.837902';
+		?>
+		<script type="text/javascript">
+		var hgmGeocoder;
+		var hgmGeoMap;
+		function hgmGeoInitialize(){
+			hgmGeocoder = new google.maps.Geocoder();
+			var hgmGeoLatlng = new google.maps.LatLng(<?php echo $default_location ?>);
+			var hgmGeoOptions = {
+				zoom: 10,
+				center: hgmGeoLatlng,
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+			}
+			hgmGeoMap = new google.maps.Map(document.getElementById("hgm-geo-map"),hgmGeoOptions);
+		}
+		function hgmCodeAddress(){
+			var address = document.getElementById("hgm-address").value;
+			hgmGeocoder.geocode({'address': address},function(results,status){
+				if(status == google.maps.GeocoderStatus.OK){
+					var latLongResult = results[0].geometry.location;
+					hgmGeoMap.setCenter(latLongResult);
+					var marker = new google.maps.Marker({
+						map: hgmGeoMap, 
+						position: latLongResult
+					});
+					//Populate location result
+					var locationString = String(latLongResult);
+					locationString = locationString.replace("(","").replace(")","");
+					document.getElementById("hgm_latlong").value = locationString;
+				}
+				else alert("Geocode Failed: " + status);
+			});
+		}
+		</script>
+		<div id="hgm-geo-map" style="width:500px; height:300px;"></div>
+        <div>
+        	<label>Enter Location </label><br />
+        	<input id="hgm-address" class="hgm-textbox" type="text">
+            <input type="button" value="GeoCode" onclick="hgmCodeAddress();"><br />
+            <label>Result </label><br />
+            <input id="hgm_latlong" class="hgm-textbox" type="text">            
+        </div>
+        <?php
+	}
+}
+
 class HgmApiLoader{
-	private $var;
-	public function __construct(){ $this->load_api(); }
+	public function __construct(){
+		global $hgm_maps,$hgm_geocoder;	
+		if($hgm_maps) $this->load_api();
+		elseif($hgm_geocoder) $this->load_api(1);
+		else return;
+	}
 	/* Load Api */
-	private function load_api(){?>
+	private function load_api($geocode = false){
+		if($geocode) $callback = '&callback=hgmGeoInitialize';
+		else $callback = '&callback=hgmInitialize';
+		?>
 		<script type="text/javascript">
         function hgmLoadApi(){
             var script = document.createElement("script");
             script.type = "text/javascript";
-            script.src = "<?php echo $this->is_ssl() ?>maps.googleapis.com/maps/api/js?key=<?php echo get_option('hgm_api_key') ?>&sensor=false&callback=hgmInitialize";
+            script.src = "<?php echo $this->is_ssl() ?>maps.googleapis.com/maps/api/js?key=<?php echo get_option('hgm_api_key') ?>&sensor=false<?php echo $callback ?>";
             document.body.appendChild(script);
         }
         window.onload = hgmLoadApi;
+		<?php if(!$geocode): ?>
         function hgmInitialize(){ <?php $this->print_map_js() ?> }
+		<?php endif ?>
         </script>
     	<?php		
 	}
@@ -25,7 +88,6 @@ class HgmApiLoader{
 			$instance_num = $map->get_instance_num();
 			$options = $this->map_opt_check($map->options);	
 			$comma_sep = $this->map_opt_sep($options);
-			
 			$map_js .= "
 			hgm{$instance_num}LatLong = new google.maps.LatLng($map->center);
 			var hgm{$instance_num}Options = {
@@ -87,10 +149,12 @@ class HgmMap{
 	}
 	/* Save Map Data */
 	private function save_map_data($args){
+		$default_location = get_option('hgm_location');
+		if(!$default_location) $default_location = '42.284821,-72.837902';
 		$defaults = array(
 			'width' => '400px',
 			'height' => '400px',
-			'center' =>'42.284821,-72.837902',
+			'center' => $default_location,
 			'zoom' => 10,
 		);
 		$map_data_array = wp_parse_args($args,$defaults);
