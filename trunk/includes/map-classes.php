@@ -98,10 +98,11 @@ class HgmGeocoder{
 		$default_location = get_option('hgm_location');
 		if(!$default_location) $default_location = '42.284821,-72.837902';
 		$defaults = array(
-			'width' => '400px',
-			'height' => '400px',
+			'width' => '500px',
+			'height' => '300px',
 			'center' => $default_location,
 			'zoom' => 12,
+			'position' => 'below'
 		);
 		$geo_data_array = wp_parse_args($args,$defaults);
 		foreach($geo_data_array as $key => $value) $this->{$key} = $value;
@@ -145,15 +146,19 @@ class HgmGeocoder{
 			});
 		}
 		</script>
+        <?php if($this->position == 'below'): ?>
 		<div id="hgm-geo-map" style="width:<?php echo $this->width ?>; height:<?php echo $this->height ?>;"></div>
-        <div>
-        	<label>Enter Location </label><br />
+        <?php endif ?>   
+        <form name="hgmGeocodeForm" id="hgm-geocode-form">
+        	<label>Enter Location</label><br />
         	<input id="hgm-address" class="hgm-textbox" type="text" onKeyPress="if(event.keyCode == 13) hgmCodeAddress();">
-            <input type="button" value="GeoCode" onclick="hgmCodeAddress();"><br />
-            <label>Result </label><br />
-            <input id="hgm_latlong" class="hgm-textbox" type="text">
-        </div>            
+            <input id="hgm-geocode" type="button" value="GeoCode" onclick="hgmCodeAddress();">
+            <input id="hgm_latlong" class="hgm-textbox" type="text" readonly="readonly">
+        </form>
+        <?php if($this->position == 'above'): ?>
+		<div id="hgm-geo-map" style="width:<?php echo $this->width ?>; height:<?php echo $this->height ?>;"></div>
         <?php
+		endif;                    
 	}
 	/* Map Options Check */
 	private function map_opt_check($options){
