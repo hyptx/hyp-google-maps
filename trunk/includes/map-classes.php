@@ -88,7 +88,8 @@ class HgmApiLoader{
 class HgmGeocoder{
 	private static $instance;
 	public function __construct($args = ''){
-		global $hgm_geocoder;
+		global $hgm_maps,$hgm_geocoder;
+		if($hgm_maps) echo '<div class="hgm-error">Geocoder cannot be created on a page with another map</div>';
 		if(self::$instance >= 1) return;
 		self::$instance = 1;
 		$this->save_geo_data($args);
@@ -174,6 +175,8 @@ class HgmMap{
 	private static $instance;
 	private $element_id,$instance_num;
 	public function __construct($args = ''){
+		global $hgm_geocoder;
+		if($hgm_geocoder) echo '<div class="hgm-error">Geocoder cannot be created on a page with another map</div>';
 		self::$instance += 1;
 		$this->element_id = 'hgm-map-canvas-' . self::$instance;
 		$this->instance_num = self::$instance;
