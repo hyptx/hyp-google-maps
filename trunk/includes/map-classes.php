@@ -117,6 +117,7 @@ class HgmGeocoder{
 		<script type="text/javascript">
 		var hgmGeocoder;
 		var hgmGeoMap;
+		var marker;
 		function hgmGeoInitialize(){
 			hgmGeocoder = new google.maps.Geocoder();
 			hgmGeoLatlng = new google.maps.LatLng(<?php echo $this->center ?>);
@@ -134,7 +135,7 @@ class HgmGeocoder{
 				if(status == google.maps.GeocoderStatus.OK){
 					var latLongResult = results[0].geometry.location;
 					hgmGeoMap.setCenter(latLongResult);
-					var marker = new google.maps.Marker({
+					marker = new google.maps.Marker({
 						map: hgmGeoMap, 
 						position: latLongResult
 					});
@@ -152,7 +153,7 @@ class HgmGeocoder{
         <?php endif ?>   
         <form name="hgmGeocodeForm" id="hgm-geocode-form">
         	<label>Enter Location</label><br />
-        	<input id="hgm-address" class="hgm-textbox" type="text" onKeyPress="if(event.keyCode == 13) hgmCodeAddress();">
+        	<input id="hgm-address" class="hgm-textbox" type="text" onKeyPress="if(event.keyCode == 13) { hgmCodeAddress(); return false;}">
             <input id="hgm-geocode" type="button" value="GeoCode" onclick="hgmCodeAddress();">
             <input id="hgm_latlong" class="hgm-textbox" type="text" readonly="readonly">
         </form>
