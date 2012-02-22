@@ -66,13 +66,20 @@ function hgm_settings_page(){
             </p>
             <p>
             	<label>Default Location</label><span class="help"><br />
-            	<input name="hgm_location" type="text" value="<?php echo $hgm_location ?>" size="24"/>
+            	<input name="hgm_location" id="hgm-location" type="text" value="<?php echo $hgm_location ?>" size="50"/>
+                <?php hgm_geocoder(array('marker' => $hgm_location,'height' => '200px')) ?>
             </p>              
             <p>
                 <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
             </p>
     	</form>
     </div><!--/.wrap-->
+    <script type="text/javascript">
+		var hgmLocationField = document.getElementById('hgm-location');
+		function hgmPopulateLoc(){ hgmLocationField.value = hgmLocation; }
+		hgmGeocodeComplete.addEventlistener('geocoded',hgmPopulateLoc);
+	</script>
+
     <?php
 }
 /* ~~~~~~~~~~~ Functions ~~~~~~~~~~~ */
