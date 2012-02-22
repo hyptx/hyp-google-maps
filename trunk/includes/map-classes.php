@@ -128,6 +128,10 @@ class HgmGeocoder{
 				<?php echo $options ?>
 			}
 			hgmGeoMap = new google.maps.Map(document.getElementById("hgm-geo-map"),hgmGeoOptions);
+			hgmGeoMarker = new google.maps.Marker({
+				map: hgmGeoMap, 
+				position: hgmGeoLatlng
+			});			
 		}
 		function hgmCodeAddress(){
 			var address = document.getElementById("hgm-address").value;
@@ -142,7 +146,8 @@ class HgmGeocoder{
 					//Populate location result
 					var locationString = String(latLongResult);
 					locationString = locationString.replace("(","").replace(")","");
-					document.getElementById("hgm_latlong").value = locationString;
+					document.getElementById("hgm-latlong").value = locationString;
+					return true;
 				}
 				else alert("Geocode Failed: " + status);
 			});
@@ -151,12 +156,12 @@ class HgmGeocoder{
         <?php if($this->position == 'below'): ?>
 		<div id="hgm-geo-map" style="width:<?php echo $this->width ?>; height:<?php echo $this->height ?>;"></div>
         <?php endif ?>   
-        <form name="hgmGeocodeForm" id="hgm-geocode-form">
+        <div id="hgm-geocode-form">
         	<label>Enter Location</label><br />
-        	<input id="hgm-address" class="hgm-textbox" type="text" onKeyPress="if(event.keyCode == 13) { hgmCodeAddress(); return false;}">
-            <input id="hgm-geocode" type="button" value="GeoCode" onclick="hgmCodeAddress();">
-            <input id="hgm_latlong" class="hgm-textbox" type="text" readonly="readonly">
-        </form>
+        	<input id="hgm-address" class="hgm-textbox" type="text" onKeyPress="if(event.keyCode == 13) { hgmCodeAddress(); return false;}" />
+            <input id="hgm-geocode" type="button" value="GeoCode" onclick="hgmCodeAddress();" />
+            <input id="hgm-latlong" name="hgm_user_geocode" class="hgm-textbox" type="text" readonly="readonly"/>
+        </div>
         <?php if($this->position == 'above'): ?>
 		<div id="hgm-geo-map" style="width:<?php echo $this->width ?>; height:<?php echo $this->height ?>;"></div>
         <?php
@@ -206,4 +211,29 @@ class HgmMap{
 	/* Get Instance Number */
 	public function get_instance_num(){ return $this->instance_num; }	
 }//END HgmMap
+
+class HgmUserGeocoder{
+	public function __construct(){
+		add_action('show_user_profile',array(&$this,'print_user_geocoder'),1,2);
+		add_action('edit_user_profile',array(&$this,'print_user_geocoder'),1,2);
+		add_action('personal_options_update',array(&$this,'save_user_geocode'));
+		add_action('edit_user_profile_update',array(&$this,'save_user_geocode'));
+	}
+	public function print_user_geocoder($user){
+		$user_location = esc_attr(get_the_author_meta('hgm_user_geocode',$user->ID)); 
+		?>
+        <h3>HGM Geocoding</h3>
+        <table class="form-table">
+    		<tr>
+                <th><label for="hgm-user-geocoder">User Location</label></th>
+                <td><?php echo 'Current Location: ' . $user_location ?><?php hgm_geocoder(array('height'=>'200px','center' => $user_location,'marker' => $user_location))?></td>
+            </tr>
+        </table>
+    	<?php
+	}
+	public function save_user_geocode($user_id){
+		if(!current_user_can('edit_user',$user_id))	return false;
+		update_usermeta($user_id,'hgm_user_geocode',$_POST['hgm_user_geocode']);
+	}
+}//END HgmUserGeocoder
 ?>
