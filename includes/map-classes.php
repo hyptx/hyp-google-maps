@@ -102,6 +102,7 @@ class HgmGeocoder{
 			'width' => '500px',
 			'height' => '300px',
 			'center' => $default_location,
+			'marker' => '',
 			'zoom' => 12,
 			'position' => 'below'
 		);
@@ -128,10 +129,12 @@ class HgmGeocoder{
 				<?php echo $options ?>
 			}
 			hgmGeoMap = new google.maps.Map(document.getElementById("hgm-geo-map"),hgmGeoOptions);
+			<?php if($this->marker): ?>
 			hgmGeoMarker = new google.maps.Marker({
 				map: hgmGeoMap, 
-				position: hgmGeoLatlng
-			});			
+				position: new google.maps.LatLng(<?php echo $this->marker ?>)
+			});
+			<?php endif ?>		
 		}
 		function hgmCodeAddress(){
 			var address = document.getElementById("hgm-address").value;
