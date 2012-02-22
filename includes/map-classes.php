@@ -136,25 +136,6 @@ class HgmGeocoder{
 			});
 			<?php endif ?>		
 		}
-		function hgmCodeAddress(){
-			var address = document.getElementById("hgm-address").value;
-			hgmGeocoder.geocode({'address': address},function(results,status){
-				if(status == google.maps.GeocoderStatus.OK){
-					var latLongResult = results[0].geometry.location;
-					hgmGeoMap.setCenter(latLongResult);
-					marker = new google.maps.Marker({
-						map: hgmGeoMap, 
-						position: latLongResult
-					});
-					//Populate location result
-					var locationString = String(latLongResult);
-					locationString = locationString.replace("(","").replace(")","");
-					document.getElementById("hgm-latlong").value = locationString;
-					return true;
-				}
-				else alert("Geocode Failed: " + status);
-			});
-		}
 		</script>
         <?php if($this->position == 'below'): ?>
 		<div id="hgm-geo-map" style="width:<?php echo $this->width ?>; height:<?php echo $this->height ?>;"></div>
@@ -162,7 +143,7 @@ class HgmGeocoder{
         <div id="hgm-geocode-form">
         	<label>Enter Location</label><br />
         	<input id="hgm-address" class="hgm-textbox" type="text" onKeyPress="if(event.keyCode == 13) { hgmCodeAddress(); return false;}" />
-            <input id="hgm-geocode" type="button" value="GeoCode" onclick="hgmCodeAddress();" />
+            <input id="hgm-geocode" class="button" type="button" value="GeoCode" onclick="hgmCodeAddress();" />
             <input id="hgm-latlong" name="hgm_user_geocode" class="hgm-textbox" type="text" readonly="readonly"/>
         </div>
         <?php if($this->position == 'above'): ?>
@@ -223,13 +204,18 @@ class HgmUserGeocoder{
 		add_action('edit_user_profile_update',array(&$this,'save_user_geocode'));
 	}
 	public function print_user_geocoder($user){
-		$user_location = esc_attr(get_the_author_meta('hgm_user_geocode',$user->ID)); 
+		$user_location = esc_attr(get_the_author_meta('hgm_user_geocode',$user->ID));
+		if($user_location) $args = array('height'=>'200px','center' => $user_location,'marker' => $user_location);
+		else{
+			$args = array('height'=>'200px');
+			$user_location = 'Undefined - Enter Location below';
+		}
 		?>
         <h3>HGM Geocoding</h3>
         <table class="form-table">
     		<tr>
                 <th><label for="hgm-user-geocoder">User Location</label></th>
-                <td><?php echo 'Current Location: ' . $user_location ?><?php hgm_geocoder(array('height'=>'200px','center' => $user_location,'marker' => $user_location))?></td>
+                <td><?php echo 'Current Location: ' . $user_location; ?><?php hgm_geocoder($args)?></td>
             </tr>
         </table>
     	<?php
@@ -237,6 +223,14 @@ class HgmUserGeocoder{
 	public function save_user_geocode($user_id){
 		if(!current_user_can('edit_user',$user_id))	return false;
 		update_usermeta($user_id,'hgm_user_geocode',$_POST['hgm_user_geocode']);
+	}
+	public function get_user_location($user_id = ''){
+		if(!$user_id){
+			global $current_user;
+			$user_id = $current_user->ID;
+			if($user_id == 0) return false;
+		}
+		return get_user_meta('hgm_user_geocode',$user_id,true);
 	}
 }//END HgmUserGeocoder
 ?>

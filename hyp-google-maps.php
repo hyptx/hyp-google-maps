@@ -18,6 +18,12 @@ Usage:
 hgm_map(array('width' => '400px','height' => '400px'));
 hgm_geocoder(array('width' => '400px','height' => '400px'));
 
+Geocode Complete Event:
+<script type="text/javascript">
+function gtSaveValue(){ gtUserGeocodeField.value = hgmLocation; }//hgmLocation is the global latlong value
+hgmGeocodeComplete.addEventlistener('geocoded',gtSaveValue);
+</script>
+
 Map Args:
 
 width = Enter css width value, 100px, 50% etc
@@ -35,7 +41,7 @@ height = Enter css height value, 100px, 50% etc
 center = Enter DDS lat,long separated by a comma, or enter 'user_id' for user location
 zoom = Google zoom value
 options = Enter a comma seperates list of javascript options
-position = Enter 'above' to display map above the o form
+position = Enter 'above' to display map above the form
 
 */
 
@@ -49,6 +55,8 @@ require(HGM_INCLUDES . 'admin.php');
 
 //Add User Geocoder
 $hgm_user_geocoder = new HgmUserGeocoder();
+
+//echo $hgm_user_geocoder->get_user_location();
 
 /* ~~~~~~~~~~~~~~ Functions ~~~~~~~~~~~~~~ */
 
@@ -86,7 +94,10 @@ function hgm_geo_shortcode($args){ return hgm_geocoder($args,true); }
 function hgm_map_shortcode($args){ return hgm_map($args,true); }
 
 /* Enqueue Styles */
-function hgm_styles(){ wp_enqueue_style('hgm_styles', HGM_PLUGIN . 'style.css'); }
+function hgm_styles(){ wp_enqueue_style('hgm_styles',HGM_PLUGIN . 'style.css'); }
+
+/* Enqueue Javascript */
+function hgm_enqueue_js(){ wp_enqueue_script('hgm_scripts',HGM_PLUGIN . 'js/scripts.js'); }
 
 /* ~~~~~~~~~~~~~~ Actions ~~~~~~~~~~~~~~ */
 
@@ -96,4 +107,6 @@ add_shortcode('hgm_geocoder','hgm_geo_shortcode');
 add_shortcode('hgm_map','hgm_map_shortcode');
 add_action('wp_print_styles','hgm_styles');
 add_action('admin_print_styles','hgm_styles');
+add_action('wp_print_scripts','hgm_enqueue_js');
+add_action('admin_print_scripts','hgm_enqueue_js');
 ?>
