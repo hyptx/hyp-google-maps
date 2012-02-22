@@ -10,15 +10,13 @@ License:
 */
 
 /*
+Usage:
 
-Geocode Args:
+[hgm_map width="400px" height="400px"]
+[hgm_geocoder width="400px" height="400px"]
 
-width = Enter css width value, 100px, 50% etc
-height = Enter css height value, 100px, 50% etc
-center = Enter DDS lat,long separated by a comma, or enter 'user_id' for user location
-zoom = Google zoom value
-options = Enter a comma seperates list of javascript options
-position = Enter 'above' to display map above the o form
+hgm_map(array('width' => '400px','height' => '400px'));
+hgm_geocoder(array('width' => '400px','height' => '400px'));
 
 Map Args:
 
@@ -29,6 +27,15 @@ zoom = Google zoom value
 heading = Enter a heading for the info window
 content = Enter content for the info window
 options = Enter a comma seperates list of javascript options
+
+Geocode Args:
+
+width = Enter css width value, 100px, 50% etc
+height = Enter css height value, 100px, 50% etc
+center = Enter DDS lat,long separated by a comma, or enter 'user_id' for user location
+zoom = Google zoom value
+options = Enter a comma seperates list of javascript options
+position = Enter 'above' to display map above the o form
 
 */
 
@@ -72,10 +79,10 @@ function hgm_map($args = '',$shortcode = false){
 	}
 }
 
-/* Geocoder Shortcode - [hgm_geocoder width="400" height="400"] */
+/* Geocoder Shortcode - [hgm_geocoder width="400px" height="400px"] */
 function hgm_geo_shortcode($args){ return hgm_geocoder($args,true); }
 
-/* Map Shortcode - [hgm_map width="400" height="400"] */
+/* Map Shortcode - [hgm_map width="400px" height="400px"] */
 function hgm_map_shortcode($args){ return hgm_map($args,true); }
 
 /* Enqueue Styles */
