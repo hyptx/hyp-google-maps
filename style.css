@@ -2,6 +2,6 @@
 .hgm-map .hgm-info-window .hgm-info-content{color:#111; margin-top:10px}
 #hgm-geocode-form{margin:8px 0}
 input.hgm-textbox{width:200px; padding:3px}
-input#hgm_latlong{background:#D1FBD1}
+input#hgm-latlong{background:#D1FBD1}
 input#hgm-geocode{font-size:14px; padding:2px 5px}
 .hgm-error{color:#333; background-color:#FFE4AE; font-weight:bold; border:1px solid #FFFFAE; padding:4px 12px;margin:20px}
