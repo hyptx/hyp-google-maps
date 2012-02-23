@@ -22,9 +22,10 @@ function hgmCodeAddress(){
 
 //Geocoded Event
 hgmCreateEvent('geocoded');
-		
+
+//Dispatcher	
 function hgmEventDispatcher(){ this.events = []; }
-//Add Event Listener
+//Event Listener
 hgmEventDispatcher.prototype.addEventlistener = function(event,callback){
 	this.events[event] = this.events[event] || [];
 	if(this.events[event]) this.events[event].push(callback);
@@ -42,14 +43,14 @@ hgmEventDispatcher.prototype.removeEventlistener = function(event,callback){
 	}
 	return false;
 }
-//Dispatch Event
+//Dispatch Event Prototype
 hgmEventDispatcher.prototype.dispatch = function(event){
 	if(this.events[event]){
 		var listeners = this.events[event],len = listeners.length;
 		while(len--){ listeners[len](this);	}		
 	}
 }
-//Create Event Function - Use this as the event factory
+//Create Event
 function hgmCreateEvent(eventName){
 	hgmEventObject.prototype = new hgmEventDispatcher();
 	hgmEventObject.prototype.dispatchHgmEvent = function(eventName){ this.dispatch(eventName); }
