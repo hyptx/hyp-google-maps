@@ -2,7 +2,7 @@
 /*
 Plugin Name: Hyp Google Maps
 Plugin URI: http://google-maps.myhyperspace.com/
-Description: A Google Map Plugin
+Description: A Google Map Plugin and geocoder
 Version: 1.0
 Author: Adam J Nowak
 Author URI: http://hyperspatial.com/
