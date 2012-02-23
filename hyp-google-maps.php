@@ -9,42 +9,6 @@ Author URI: http://hyperspatial.com/
 License: 
 */
 
-/*
-Usage:
-
-[hgm_map width="400px" height="400px"]
-[hgm_geocoder width="400px" height="400px"]
-
-hgm_map(array('width' => '400px','height' => '400px'));
-hgm_geocoder(array('width' => '400px','height' => '400px'));
-
-Geocode Complete Event:
-<script type="text/javascript">
-function gtSaveValue(){ gtUserGeocodeField.value = hgmLocation; }//hgmLocation is the global latlong value
-hgmGeocodeComplete.addEventlistener('geocoded',gtSaveValue);
-</script>
-
-Map Args:
-
-width = Enter css width value, 100px, 50% etc
-height = Enter css height value, 100px, 50% etc
-center = Enter DDS lat,long separated by a comma, or enter 'user_id' for user location
-zoom = Google zoom value
-heading = Enter a heading for the info window
-content = Enter content for the info window
-options = Enter a comma seperates list of javascript options
-
-Geocode Args:
-
-width = Enter css width value, 100px, 50% etc
-height = Enter css height value, 100px, 50% etc
-center = Enter DDS lat,long separated by a comma, or enter 'user_id' for user location
-zoom = Google zoom value
-options = Enter a comma seperates list of javascript options
-position = Enter 'above' to display map above the form
-
-*/
-
 //Constants
 define('HGM_PLUGIN',WP_PLUGIN_URL . '/' . basename(dirname(__FILE__)) . '/');
 define('HGM_INCLUDES',dirname(__FILE__) . '/includes/');
@@ -56,12 +20,20 @@ require(HGM_INCLUDES . 'admin.php');
 //Add User Geocoder
 $hgm_user_geocoder = new HgmUserGeocoder();
 
-//echo $hgm_user_geocoder->get_user_location();
-
 /* ~~~~~~~~~~~~~~ Functions ~~~~~~~~~~~~~~ */
+
+/*  Get User Location */
+function hgm_get_user_location($user_id){ return get_user_meta($user_id,'hgm_user_geocode',true); }
+
+/*  Get Post Location */
+function hgm_get_post_location($post_id){ return get_post_meta($post_id,'hgm_user_geocode',true); }
 
 /* Load Api */
 function hgm_load_api(){ $api_loader = new HgmApiLoader(); }
+
+/* Load Post Geocoder */
+function hgm_load_post_geocoder(){ return new HgmPostGeocoder(); }
+if(is_admin()) add_action('load-post.php','hgm_load_post_geocoder');
 
 /* Geocoder */
 function hgm_geocoder($args = '',$shortcode = false){
