@@ -77,7 +77,7 @@ function hgm_settings_page(){
     <script type="text/javascript">
 		var hgmLocationField = document.getElementById('hgm-location');
 		function hgmPopulateLoc(){ hgmLocationField.value = hgmLocation; }
-		hgmGeocodeComplete.addEventlistener('geocoded',hgmPopulateLoc);
+		eventObject.addEventlistener('geocoded',hgmPopulateLoc);
 	</script>
 
     <?php
