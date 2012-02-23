@@ -12,7 +12,7 @@ function hgmCodeAddress(){
 			hgmLocation = String(latLongResult);
 			hgmLocation = hgmLocation.replace("(","").replace(")","");
 			document.getElementById("hgm-latlong").value = hgmLocation;
-			hgmGeocodeComplete.dispatchHgmEvent();
+			eventObject.dispatchHgmEvent('geocoded');
 		}
 		else alert("Geocode Failed: " + status);
 	});
@@ -21,7 +21,7 @@ function hgmCodeAddress(){
 /* ~~~~~~~~~ Events ~~~~~~~~~ */
 
 //Geocoded Event
-hgmGeocodeComplete = hgmCreateEvent('geocoded');
+hgmCreateEvent('geocoded');
 		
 function hgmEventDispatcher(){ this.events = []; }
 //Add Event Listener
@@ -52,8 +52,7 @@ hgmEventDispatcher.prototype.dispatch = function(event){
 //Create Event Function - Use this as the event factory
 function hgmCreateEvent(eventName){
 	hgmEventObject.prototype = new hgmEventDispatcher();
-	hgmEventObject.prototype.dispatchHgmEvent = function(){ this.dispatch(eventName); }
-	var eventObject = new hgmEventObject();
+	hgmEventObject.prototype.dispatchHgmEvent = function(eventName){ this.dispatch(eventName); }
+	eventObject = new hgmEventObject();
 	function hgmEventObject(){ hgmEventDispatcher.call(this); }
-	return eventObject;
 }
