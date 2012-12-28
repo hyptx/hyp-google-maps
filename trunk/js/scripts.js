@@ -10,7 +10,7 @@ function hgmCodeAddress(){
 			});
 			//Populate location result
 			hgmLocation = String(latLongResult);
-			hgmLocation = hgmLocation.replace("(","").replace(")","");
+			hgmLocation = hgmLocation.replace("(","").replace(")","").replace(" ","");
 			document.getElementById("hgm-latlong").value = hgmLocation;
 			eventObject.dispatchHgmEvent('geocoded');
 		}

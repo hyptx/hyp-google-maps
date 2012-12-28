@@ -3,6 +3,7 @@
 $hgm_field_names = array(
 	'hgm_api_key',
 	'hgm_location',
+	'hgm_geocode_users',
 	'hgm_post_types'
 );
 /* Admin Menu */
@@ -58,6 +59,7 @@ function hgm_settings_page(){
             	<p>This plugin allows you to easily create Google maps and geocode posts, pages and custom post types. To learn more about map options see <a href="http://code.google.com/apis/maps/documentation/javascript/reference.html#MapOptions" target="_blank">Google MapOptions</a></p>
             	<ul>
                 	<li><strong>API Key</strong> - Obtain your <a href="https://code.google.com/apis/console" target="_blank">API Key</a> and enter it into this field</li>
+					<li><strong>User</strong> - Add geocoding to user profiles</li>
                     <li><strong>Geocoded Post Types</strong> - Post types to geocode and display the map/form</li>
                     <li><strong>Default Location</strong> - Stored Lat,Long in decimal degrees for the starter map</li>
                     <li><strong>Enter Location</strong> - Input an address or general location, then press the 'Geocode' button</li>
@@ -70,11 +72,12 @@ function hgm_settings_page(){
                 </p>
                 <p>
                 	<strong>PHP:</strong><br />
-                    <code>&lt;php hgm_map('width=400px&height=400px')); ?&gt;</code><br />
-                    <code>&lt;php hgm_map(array('width' => '400px','height' => '400px')); ?&gt;</code><br />
-					<code>&lt;php hgm_geocoder(array('width' => '400px','height' => '400px')); ?&gt;</code><br /><br />
-                    <code>&lt;php hgm_get_user_location($user_id); ?&gt;</code><br /> 
-                    <code>&lt;php hgm_get_post_location($post_id); ?&gt;</code>
+                    <code>&lt;?php hgm_map('width=400px&height=400px'); ?&gt;</code><br />
+					<code>&lt;?php hgm_get_full_map_link($location); ?&gt;</code><br />
+                    <code>&lt;?php hgm_map(array('width' => '400px','height' => '400px')); ?&gt;</code><br />
+					<code>&lt;?php hgm_geocoder(array('width' => '400px','height' => '400px')); ?&gt;</code><br /><br />
+                    <code>&lt;?php hgm_get_user_location($user_id); ?&gt;</code><br /> 
+                    <code>&lt;?php hgm_get_post_location($post_id); ?&gt;</code>
                 </p>
                 <p>
                	<h4>Map Arguments:</h4><br />
@@ -112,6 +115,12 @@ function hgm_settings_page(){
             	<label>Google API Key - <a href="https://code.google.com/apis/console" target="_blank">Get Key</a></span></label><span class="help"><br />
             	<input name="hgm_api_key" type="text" value="<?php echo $hgm_api_key ?>" size="50"/>
             </p>
+			<p>
+            	<label>Users</label>
+				<p>
+				<input type="checkbox" name="hgm_geocode_users" value="true" <?php if($hgm_geocode_users == 'true') echo 'checked="checked"' ?> /> Geocode Users
+                </p>
+            </p>     
             <p>
             	<label>Geocoded Post Types</label>
 				<p>

@@ -200,6 +200,8 @@ class HgmGeocoder{
 
 class HgmUserGeocoder{
 	public function __construct(){
+		$hgm_geocode_users = get_option('hgm_geocode_users');
+		if($hgm_geocode_users != 'true') return false;
 		add_action('show_user_profile',array(&$this,'print_user_geocoder'),1,2);
 		add_action('edit_user_profile',array(&$this,'print_user_geocoder'),1,2);
 		add_action('personal_options_update',array(&$this,'save_user_geocode'));

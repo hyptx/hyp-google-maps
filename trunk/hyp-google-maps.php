@@ -2,8 +2,8 @@
 /*
 Plugin Name: Hyp Google Maps
 Plugin URI: http://google-maps.myhyperspace.com/
-Description: A Google Maps plugin and geocoder. Geocode users, posts, pages and custom post types.
-Version: 1.0
+Description: A Google Maps - API V3 plugin and geocoder. Geocode users, posts, pages and custom post types.
+Version: 1.1
 Author: Adam J Nowak
 Author URI: http://hyperspatial.com/
 License: 
@@ -21,12 +21,15 @@ require(HGM_INCLUDES . 'admin.php');
 $hgm_user_geocoder = new HgmUserGeocoder();
 
 /* ~~~~~~~~~~~~~~ Functions ~~~~~~~~~~~~~~ */
-
+//https://maps.google.com/maps?q=Google+Inc&num=1&t=h&vpsrc=0&gl=us&ie=UTF8&ll=39.922985,-104.983463&spn=0.012227,0.026801&z=16&iwloc=A&cid=14797870369034515076
 /*  Get User Location */
 function hgm_get_user_location($user_id){ return get_user_meta($user_id,'hgm_user_geocode',true); }
 
 /*  Get Post Location */
 function hgm_get_post_location($post_id){ return get_post_meta($post_id,'hgm_user_geocode',true); }
+
+/*  Get Post Location */
+function hgm_get_full_map_link($location){ return 'https://maps.google.com/maps?t=h&z=16&q=loc:' . $location; }
 
 /* Load Api */
 function hgm_load_api(){ $api_loader = new HgmApiLoader(); }
