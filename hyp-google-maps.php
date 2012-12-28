@@ -21,7 +21,7 @@ require(HGM_INCLUDES . 'admin.php');
 $hgm_user_geocoder = new HgmUserGeocoder();
 
 /* ~~~~~~~~~~~~~~ Functions ~~~~~~~~~~~~~~ */
-//https://maps.google.com/maps?q=Google+Inc&num=1&t=h&vpsrc=0&gl=us&ie=UTF8&ll=39.922985,-104.983463&spn=0.012227,0.026801&z=16&iwloc=A&cid=14797870369034515076
+
 /*  Get User Location */
 function hgm_get_user_location($user_id){ return get_user_meta($user_id,'hgm_user_geocode',true); }
 
