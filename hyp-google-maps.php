@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Hyp Google Maps
-Plugin URI: http://google-maps.myhyperspace.com/
+Plugin URI: https://github.com/hyptx/hyp-google-maps
 Description: A Google Maps - API V3 plugin and geocoder. Geocode users, posts, pages and custom post types.
 Version: 1.1
 Author: Adam J Nowak
